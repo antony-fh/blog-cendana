@@ -1,0 +1,26 @@
+public function ekspor(){
+		include_once './assets/PHPExcel/Classes/PHPExcel.php';
+		$result = $this->M_kota->getkt();
+
+		$objPHPExcel = new PHPExcel(); 
+		$objPHPExcel->setActiveSheetIndex(0); 
+		$rowCount = 1; 
+		
+			$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, 'ID'); 
+			$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, 'Nama Kota'); 
+			$rowCount++; 
+
+
+		foreach ($result as $value) {
+
+			$objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $value['id_kota']); 
+			$objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $value['nama_kota']); 
+			$rowCount++; 
+
+		}
+
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel); 
+		$objWriter->save('./assets/excel/kota.xlsx'); 	
+		$this->load->helper('download');
+		force_download('./assets/excel/kota.xlsx',null);
+	}
